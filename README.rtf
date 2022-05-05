@@ -1,0 +1,35 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2580
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Calibri;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww23200\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 NOTE: this is a research script which features many diagnostics exports built it for exploration. Not a production-ready script ready to be ported to an API. :) \
+\
+Steps to run this project:\
+\
+Set-up: run the requirements.txt file to install the necessary libraries (to a virtual environment if desired)\
+\
+\
+If you run all the notebooks in the same folder the pipeline should work, capturing the outputs of each step as the input to the next.\
+\
+Step 1: Data Ingestion from Twitter\
+- Twitter API developer credentials needed\
+- exports a series of CSVs which are consumed in Step 2\
+\
+Step 2: Adjacency List Creation\
+- consumes the files from Step 1\
+- performs text processing in TextBlob and spaCy\
+- run this from terminal before running spaCy to download language corpus: 
+\f1 python -m spacy download en_core_web_sm
+\f0 \
+- creates an adjacency list and exports it as a CSV\
+- at the conclusion of the Python notebook you will have adjacency list to import to Gephi. To process to import to Gephi, create communities, and then export again can be explained in many online tutorials such as this one here:\
+https://libguides.brown.edu/gephi\
+\
+Step 3: Summary Statistics\
+- This consumes the output of the adjacency list, merges with the original data files, and creates a number of summary statistics for explainability and actionability\
+\
+questions: aliss77777@gmail.com\
+}
