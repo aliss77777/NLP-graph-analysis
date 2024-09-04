@@ -21,6 +21,7 @@ Step 2: Adjacency List Creation
 
 Step 3: Summary Statistics
 - This consumes the output of the adjacency list, merges with the original data files, and creates a number of summary statistics for explainability and actionability
+- Including, creating topic detection for a text corpus, identifying the top terms within each topic, and enabling insights & response to the discussions
 
 questions: aliss77777@gmail.com
 
