@@ -1,4 +1,4 @@
-NOTE: this is a research script which features many diagnostics for exploration. Built as modular components to be cloned and remixed as needed.
+NOTE: this is a research script which features many diagnostics for exploration. Built as modular components to be cloned and remixed as needed. As of August 2024 the Twitter API has been modified so Step 1 will not work as-is. However, steps 2 and 3 are still useful for any collection of text documents.
 
 Steps to run this project:
 
