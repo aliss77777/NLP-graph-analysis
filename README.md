@@ -1,27 +1,106 @@
-NOTE: this is a research script which features many diagnostics for exploration. Built as modular components to be cloned and remixed as needed. As of August 2024 the Twitter API has been modified so Step 1 will not work as-is. However, steps 2 and 3 are still useful for any collection of text documents.
+# NLP Graph Analysis v2
 
-Steps to run this project:
+> **Release: `v2.0.0b1` (beta)** on branch **`v2_AI_update`** — verified offline lexical KG.  
+> Not production-ready for DBX load until W4 (quota + Sprint 3 gate). See [docs/V2_TRANSFORMATION_WORKPLAN.md](docs/V2_TRANSFORMATION_WORKPLAN.md).
 
-- Set-up: run the requirements.txt file to install the necessary libraries (to a virtual environment if desired)\
+**Lexical knowledge graphs for AI search optimization (GEO).**
 
+Extract the exact phrases B2B buyers use in discussions, cluster them into communities, and map platform ownership — so content can match verbatim AI search queries (ChatGPT, Perplexity, Gemini).
 
-If you run all the notebooks in the same folder the pipeline should work, capturing the outputs of each step as the input to the next.
+Evolution of the 2020–2024 [NLP-graph-analysis](https://github.com/aliss77777/NLP-graph-analysis) research notebooks (spaCy + CountVectorizer + Louvain). Step 1 (Twitter API ingestion) is retired. Steps 2–3 are ported to this package with a modern stack.
 
-Step 1: Data Ingestion from Twitter (deprecated)
-- Twitter API developer credentials needed
-- exports a series of CSVs which are consumed in Step 2
+## What's new in v2
 
-Step 2: Adjacency List Creation
-- consumes the files from Step 1
-- performs text processing in TextBlob and spaCy
-- run this from terminal before running spaCy to download language corpus: 
- -- python -m spacy download en_core_web_sm
-- creates an adjacency list and exports it as a CSV
-- update to the script (May 2022) performs community detection in python and exports a file in GraphML format for visualization in Gephi or other visualization tool for networks
+| v1 (notebooks) | v2 (package) |
+|----------------|--------------|
+| Unigram CountVectorizer | **2–4 gram TF-IDF** + B2B seed patterns |
+| Generic co-occurrence topics | **Phrase graph** + Leiden communities |
+| Louvain only | **Leiden** (Louvain fallback) |
+| Manual topic names | LLM question-form naming (W3 stub) |
+| Twitter CSV ingest | BQ / Parquet / CSV |
+| Jupyter-only | `pip install -e .` + CLI |
 
-Step 3: Summary Statistics
-- This consumes the output of the adjacency list, merges with the original data files, and creates a number of summary statistics for explainability and actionability
-- Including, creating topic detection for a text corpus, identifying the top terms within each topic, and enabling insights & response to the discussions
+## Transformation docs
 
-questions: aliss77777@gmail.com
+**Start here:** [docs/V2_TRANSFORMATION_WORKPLAN.md](docs/V2_TRANSFORMATION_WORKPLAN.md)
 
+Covers the initial plan, friction points (2-community failure, filler false pass, dominance bugs), fixes, verified beta metrics, and W3/W4 roadmap.
+
+## Install
+
+```bash
+git clone -b v2_AI_update https://github.com/aliss77777/NLP-graph-analysis.git
+cd NLP-graph-analysis
+pip install -e ".[dev]"
+pytest
+```
+
+## Quick start
+
+```bash
+# CLI (from parquet)
+build-lexical-kg --input posts.parquet --output-dir exports
+
+# Via insurance-intel-dbx consumer
+cd ~/Documents/insurance-intel-dbx
+pip install -e ~/Documents/NLP-graph-analysis[dev]
+PYTHONPATH=. python scripts/build_lexical_kg_offline.py
+```
+
+## Outputs
+
+| File | Description |
+|------|-------------|
+| `phrase_extractions.parquet` | post_id, phrase, score, channel, platform |
+| `post_community.parquet` | primary community assignment per post |
+| `kg_nodes.parquet` | phrase + entity + platform nodes |
+| `kg_edges.parquet` | co_occurs + owned_by edges |
+| `kg_communities.parquet` | Leiden clusters + top_terms |
+| `kg_platform_pivot.parquet` | platform×community ownership |
+
+## Beta metrics (v3-beta3, verified)
+
+| Gate | Result |
+|------|--------|
+| Communities | 21 |
+| Post partition | 11,753 / 11,770 |
+| Surfaced top-25 filler | 0 / 342 (0.0%) |
+| Runtime | ~16s on 11.7k posts |
+
+## Package layout
+
+```
+nlp_graph/
+├── ingest/       # posts from BQ, parquet, CSV
+├── extract/      # TF-IDF phrases, stoplists, entities
+├── graph/        # co-occurrence graph, Leiden
+├── summarize/    # ranking, post-primary communities, pivot
+├── export/       # kg_* parquet schema
+└── pipeline.py   # end-to-end build
+```
+
+## Legacy notebooks
+
+Preserved for reference (v1 research):
+
+- `Social Content Analysis Step 1_DL tweets.ipynb` — deprecated
+- `Social Content Analysis Step_2_adjacency list.ipynb`
+- `Social Content Analysis Step_3_merge and analyze.ipynb`
+
+## Integration
+
+Used by **insurance-intel-dbx** DBX Phase 2:
+
+- `semantic/lexical_kg.py` — adapter
+- `scripts/build_lexical_kg_offline.py` — offline build
+
+## Branches
+
+| Branch | Purpose |
+|--------|---------|
+| `main` | v1 notebooks (legacy) |
+| **`v2_AI_update`** | **Canonical v2 lexical KG** — merge to main when stable |
+
+## License
+
+MIT

@@ -1,0 +1,16 @@
+legacy/
+notebooks/
+
+# Build outputs
+exports/
+*.parquet
+*.graphml
+
+# Python
+__pycache__/
+*.egg-info/
+.venv/
+.pytest_cache/
+
+# IDE
+.DS_Store
