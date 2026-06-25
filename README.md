@@ -16,9 +16,7 @@ This repo is the **v2 rewrite** of the 2020–2024 research notebooks (spaCy + C
 
 ## Why lexical phrases, not embeddings?
 
-AI search engines reward content that uses **literal buyer language**. Embedding similarity finds semantically related text; GEO optimization needs **exact phrase extraction** — "migrate off Snowflake", "dbt Cloud vs dbt Core", "Unity Catalog pricing".
-
-We tested embedding-based community detection on a 17k-post corpus: it produced **2 communities**. A lexical phrase co-occurrence graph on the same domain produces **20+ meaningful clusters** in under 20 seconds. Communities are built from **TF-IDF 2–4 grams + Leiden**, not from vector space.
+AI search engines reward content that uses **literal buyer language**. Embedding similarity finds semantically related text; GEO optimization needs **exact phrase extraction** — in the case of b2b SaaS discussion around DataTech, phrases like "migrate off Snowflake", "dbt Cloud vs dbt Core", "Unity Catalog pricing".
 
 ---
 
