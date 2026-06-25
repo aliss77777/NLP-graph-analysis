@@ -1,3 +1,7 @@
+> **v2 lexical knowledge graph (2025–2026):** The installable `nlp_graph` package — phrase extraction, Leiden communities, platform ownership for AI search optimization — lives on branch **[`v2_AI_update`](https://github.com/aliss77777/NLP-graph-analysis/tree/v2_AI_update)** with release **[`v2.0.0b1`](https://github.com/aliss77777/NLP-graph-analysis/releases/tag/v2.0.0b1)**. Start there for the current project.
+
+---
+
 NOTE: this is a research script which features many diagnostics for exploration. Built as modular components to be cloned and remixed as needed. As of August 2024 the Twitter API has been modified so Step 1 will not work as-is. However, steps 2 and 3 are still useful for any collection of text documents.
 
 Steps to run this project:
