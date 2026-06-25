@@ -4,6 +4,7 @@ notebooks/
 # Build outputs
 exports/
 *.parquet
+!examples/*.parquet
 *.graphml
 
 # Python
